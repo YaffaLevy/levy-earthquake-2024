@@ -1,6 +1,8 @@
 package levy.earthquake.json;
 
+
 public class FeatureCollection {
 
-    public Feature feature [];
+    public Feature features[];
+
 }
