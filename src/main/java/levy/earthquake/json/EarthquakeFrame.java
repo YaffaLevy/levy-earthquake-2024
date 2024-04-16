@@ -10,13 +10,18 @@ import levy.earthquake.EarthquakeServiceFactory;
 import levy.earthquake.json.FeatureCollection;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.*;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Arrays;
 
 public class EarthquakeFrame extends JFrame {
     private JList<String> jlist = new JList<>();
     private Disposable disposable;
-
+    public Feature[] features;
     public EarthquakeFrame() {
         setSize(400, 600);
         setTitle("");
@@ -51,6 +56,22 @@ public class EarthquakeFrame extends JFrame {
                 fetchEarthquakeData(service.significantLast30Days());
             }
         });
+        jlist.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting()) {
+                    int selectedIndex = jlist.getSelectedIndex();
+                    if (selectedIndex != -1) {
+                        Feature selectedFeature = features[selectedIndex];
+                        double latitude = selectedFeature.geometry.coordinates[1];
+                        double longitude = selectedFeature.geometry.coordinates[0];
+                        openGoogleMaps(latitude, longitude);
+                    }
+                }
+            }
+        });
+
+
     }
 
     private void fetchEarthquakeData(Single<FeatureCollection> data) {
@@ -65,12 +86,28 @@ public class EarthquakeFrame extends JFrame {
                         this::handleResponse,
                         Throwable::printStackTrace);
     }
+
     private void handleResponse(FeatureCollection response) {
-        String[] listData = Arrays.stream(response.features)
-                .map(feature -> feature.properties.mag + " " + feature.properties.place)
-                .toList()
-                .toArray(new String[0]);
-        jlist.setListData(listData);
+
+        features = response.features;
+
+
+        DefaultListModel<String> listModel = new DefaultListModel<>();
+        Arrays.stream(response.features)
+                .forEach(feature -> {
+                    String item = feature.properties.mag + " " + feature.properties.place;
+                    listModel.addElement(item);
+                });
+        jlist.setModel(listModel);
+    }
+
+    private void openGoogleMaps(double latitude, double longitude) {
+        String url = "https://www.google.com/maps/search/?api=1&query=" + latitude + "," + longitude;
+        try {
+            Desktop.getDesktop().browse(new URI(url));
+        } catch (IOException | URISyntaxException ex) {
+            ex.printStackTrace();
+        }
     }
     public static void main(String[] args) {
         new EarthquakeFrame().setVisible(true);
