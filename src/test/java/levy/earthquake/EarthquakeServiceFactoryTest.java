@@ -10,16 +10,19 @@ class EarthquakeServiceFactoryTest {
 
     @Test
     void oneHour() {
-        //given
+        // Given
         EarthquakeService service = new EarthquakeServiceFactory().getService();
-        // when
+
+        // When
         FeatureCollection collection = service.oneHour().blockingGet();
-        // then 
+
+        // Then
         Properties properties = collection.features[0].properties;
         assertNotNull(properties.place);
-        assertNotEquals(0,properties.mag);
-        assertNotEquals(0,properties.time);
+        assertNotEquals(0, properties.mag);
+        assertNotEquals(0, properties.time);
     }
+
     @Test
     void significantLast30Days() {
         // Given
@@ -27,12 +30,11 @@ class EarthquakeServiceFactoryTest {
 
         // When
         FeatureCollection collection = service.significantLast30Days().blockingGet();
-        // Then
 
+        // Then
         Properties properties = collection.features[0].properties;
         assertNotNull(properties.place);
         assertNotEquals(0, properties.mag);
         assertNotEquals(0, properties.time);
     }
-
 }

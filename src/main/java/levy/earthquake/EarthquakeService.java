@@ -10,5 +10,4 @@ public interface EarthquakeService {
 
     @GET("/earthquakes/feed/v1.0/summary/significant_month.geojson")
     Single<FeatureCollection> significantLast30Days();
-
 }
