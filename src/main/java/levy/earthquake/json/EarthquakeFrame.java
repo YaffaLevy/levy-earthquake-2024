@@ -1,6 +1,5 @@
 package levy.earthquake.json;
 
-
 import hu.akarnokd.rxjava3.swing.SwingSchedulers;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.disposables.Disposable;
@@ -22,6 +21,7 @@ public class EarthquakeFrame extends JFrame {
     private JList<String> jlist = new JList<>();
     private Disposable disposable;
     public Feature[] features;
+
     public EarthquakeFrame() {
         setSize(400, 600);
         setTitle("");
@@ -34,8 +34,6 @@ public class EarthquakeFrame extends JFrame {
         ButtonGroup radioButtonGroup = new ButtonGroup();
         radioButtonGroup.add(oneHourRadioButton);
         radioButtonGroup.add(thirtyDaysRadioButton);
-
-
 
         JPanel radioButtonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         radioButtonPanel.add(oneHourRadioButton);
@@ -52,7 +50,6 @@ public class EarthquakeFrame extends JFrame {
         });
         thirtyDaysRadioButton.addActionListener(e -> {
             if (thirtyDaysRadioButton.isSelected()) {
-
                 fetchEarthquakeData(service.significantLast30Days());
             }
         });
@@ -70,13 +67,10 @@ public class EarthquakeFrame extends JFrame {
                 }
             }
         });
-
-
     }
 
     private void fetchEarthquakeData(Single<FeatureCollection> data) {
-
-        if ( disposable != null && !disposable.isDisposed()) {
+        if (disposable != null && !disposable.isDisposed()) {
             disposable.dispose();
         }
 
@@ -88,9 +82,7 @@ public class EarthquakeFrame extends JFrame {
     }
 
     private void handleResponse(FeatureCollection response) {
-
         features = response.features;
-
 
         DefaultListModel<String> listModel = new DefaultListModel<>();
         Arrays.stream(response.features)
@@ -109,12 +101,8 @@ public class EarthquakeFrame extends JFrame {
             ex.printStackTrace();
         }
     }
+
     public static void main(String[] args) {
         new EarthquakeFrame().setVisible(true);
-
     }
 }
-
-
-
-

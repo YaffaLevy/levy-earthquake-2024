@@ -6,7 +6,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class EarthquakeServiceFactory {
 
-    public EarthquakeService getService(){
+    public EarthquakeService getService() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://earthquake.usgs.gov/")
                 // Configure Retrofit to use Gson to turn the Json into Objects
@@ -18,4 +18,3 @@ public class EarthquakeServiceFactory {
         return retrofit.create(EarthquakeService.class);
     }
 }
-
