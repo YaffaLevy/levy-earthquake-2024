@@ -20,7 +20,7 @@ import java.util.Arrays;
 public class EarthquakeFrame extends JFrame {
     private JList<String> jlist = new JList<>();
     private Disposable disposable;
-    public Feature[] features;
+    private Feature[] features;
 
     public EarthquakeFrame() {
         setSize(400, 600);
